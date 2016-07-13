@@ -2,6 +2,8 @@ import { Component, NgZone } from '@angular/core';
 import { ActivatedRoute,ROUTER_DIRECTIVES } from '@angular/router';
 import { Tracker } from 'meteor/tracker';
 import {Parties} from '../../../collections/parties.ts';
+import { Meteor } from 'meteor/meteor';
+import { RequireUser } from 'angular2-meteor-accounts-ui';
  
 import template from './party-details.html';
  
@@ -10,6 +12,7 @@ import template from './party-details.html';
   template,
   directives: [ROUTER_DIRECTIVES]
 })
+@RequireUser()
 export class PartyDetails {
   partyId: string;
   party: Party;
@@ -29,12 +32,16 @@ export class PartyDetails {
   }
 
   saveParty(party) {
-    Parties.update(party._id, {
-      $set: {
-        name: party.name,
-        description: party.description,
-        location: party.location
-      }
-    });
+    if (Meteor.userId()) {
+      Parties.update(party._id, {
+        $set: {
+          name: party.name,
+          description: party.description,
+          location: party.location
+        }
+      });
+    } else {
+      alert('Please log in to change this party');
+    }
   }
 }
