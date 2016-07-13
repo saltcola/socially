@@ -13,7 +13,7 @@ import template from './parties-list.html';
 })
 
 export class PartiesList {
-	parties: Mongo.Cursor<Object>;
+	parties: Mongo.Cursor<Party>;
 
 	constructor() {
 		this.parties = Parties.find();
