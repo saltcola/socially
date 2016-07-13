@@ -1,8 +1,7 @@
 import { Component, NgZone } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute,ROUTER_DIRECTIVES } from '@angular/router';
 import { Tracker } from 'meteor/tracker';
 import {Parties} from '../../../collections/parties.ts';
-import { ROUTER_DIRECTIVES }  from '@angular/router';
  
 import template from './party-details.html';
  
@@ -26,6 +25,16 @@ export class PartyDetails {
           this.party = Parties.findOne(this.partyId);
         });
       });
+    });
+  }
+
+  saveParty(party) {
+    Parties.update(party._id, {
+      $set: {
+        name: party.name,
+        description: party.description,
+        location: party.location
+      }
     });
   }
 }
